@@ -1,0 +1,39 @@
+openapi: "3.0.3"
+info:
+  title: "Broken API"
+  # Missing info.description
+  # Missing info.version
+
+paths:
+  /users/: # Trailing slash violation
+    get:
+      summary: "List users"
+      # Missing description
+      operationId: "getUsers"
+      responses:
+        "209": # Non-standard HTTP status code violation
+          description: "Custom code"
+        "200":
+          # Missing response description violation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NonExistentModel" # Dangling ref violation
+
+  /users/{userId}:
+    get:
+      summary: "Get user"
+      description: "Returns a user."
+      operationId: "getUsers" # Duplicate operationId violation
+      # Missing parameter definition for {userId}
+      responses:
+        "200":
+          description: "User details"
+
+components:
+  schemas:
+    UnusedModel: # Unused schema violation
+      type: "object"
+      properties:
+        id:
+          type: "string"

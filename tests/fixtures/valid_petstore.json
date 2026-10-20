@@ -1,0 +1,64 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Petstore API JSON",
+    "version": "1.0.0",
+    "description": "A production-grade OpenAPI specification for managing pets in JSON.",
+    "contact": {
+      "name": "API Support Team",
+      "email": "support@petstore.example.com"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "paths": {
+    "/pets": {
+      "get": {
+        "summary": "List all pets",
+        "description": "Returns a paginated list of pets available in the store.",
+        "operationId": "listPets",
+        "tags": ["pets"],
+        "responses": {
+          "200": {
+            "description": "A paged array of pets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-KEY"
+      }
+    },
+    "schemas": {
+      "Pet": {
+        "type": "object",
+        "description": "A pet animal representation.",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      }
+    }
+  }
+}

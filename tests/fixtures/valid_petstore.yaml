@@ -1,0 +1,147 @@
+openapi: "3.0.3"
+info:
+  title: "Petstore API"
+  version: "1.0.0"
+  description: "A production-grade OpenAPI specification for managing pets."
+  contact:
+    name: "API Support Team"
+    email: "support@petstore.example.com"
+    url: "https://petstore.example.com/support"
+  license:
+    name: "MIT"
+    url: "https://opensource.org/licenses/MIT"
+
+servers:
+  - url: "https://api.petstore.example.com/v1"
+    description: "Production server"
+
+security:
+  - ApiKeyAuth: []
+
+paths:
+  /pets:
+    get:
+      summary: "List all pets"
+      description: "Returns a paginated list of pets available in the store."
+      operationId: "listPets"
+      tags:
+        - "pets"
+      parameters:
+        - name: "limit"
+          in: "query"
+          description: "Maximum number of pets to return."
+          required: false
+          schema:
+            type: "integer"
+            default: 20
+      responses:
+        "200":
+          description: "A paged array of pets"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Pet"
+        "default":
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    post:
+      summary: "Create a pet"
+      description: "Adds a new pet to the catalog."
+      operationId: "createPet"
+      tags:
+        - "pets"
+      requestBody:
+        description: "Pet to create"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewPet"
+      responses:
+        "201":
+          description: "Pet successfully created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pet"
+        "400":
+          description: "Invalid input"
+        "default":
+          description: "Unexpected error"
+
+  /pets/{petId}:
+    get:
+      summary: "Get pet by ID"
+      description: "Returns a single pet by unique identifier."
+      operationId: "showPetById"
+      tags:
+        - "pets"
+      parameters:
+        - name: "petId"
+          in: "path"
+          required: true
+          description: "The ID of the pet to retrieve."
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "Pet details"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pet"
+        "404":
+          description: "Pet not found"
+        "default":
+          description: "Unexpected error"
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: "apiKey"
+      in: "header"
+      name: "X-API-KEY"
+
+  schemas:
+    Pet:
+      type: "object"
+      description: "A pet animal available in the store."
+      required:
+        - "id"
+        - "name"
+      properties:
+        id:
+          type: "string"
+        name:
+          type: "string"
+        tag:
+          type: "string"
+
+    NewPet:
+      type: "object"
+      description: "Payload for creating a new pet."
+      required:
+        - "name"
+      properties:
+        name:
+          type: "string"
+        tag:
+          type: "string"
+
+    Error:
+      type: "object"
+      description: "Standard error response representation."
+      required:
+        - "code"
+        - "message"
+      properties:
+        code:
+          type: "integer"
+        message:
+          type: "string"
