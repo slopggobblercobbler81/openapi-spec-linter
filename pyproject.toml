@@ -1,22 +1,45 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tls-cipher-scanner"
-version = "0.1.0"
-description = "Python CLI that audits SSL/TLS cipher suites and TLS protocol versions for domains or endpoints."
+name = "openapi-spec-linter"
+version = "1.0.0"
+description = "Production-grade OpenAPI v3 (YAML/JSON) specification linter and quality gate."
 readme = "README.md"
-requires-python = ">=3.8"
+authors = [{ name = "slopggobblercobbler81" }]
+license = { text = "MIT" }
 classifiers = [
-    "Programming Language :: Python :: 3",
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Internet :: WWW/HTTP",
 ]
-dependencies = []
+keywords = ["openapi", "swagger", "linter", "api", "validation", "yaml", "json"]
+requires-python = ">=3.8"
+dependencies = [
+    "click>=8.0.0",
+    "pyyaml>=6.0",
+    "rich>=12.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+]
 
 [project.scripts]
-tls-cipher-scanner = "tls_cipher_scanner:main"
+openapi-spec-linter = "openapi_spec_linter.cli:main"
 
-[tool.setuptools]
-py-modules = ["tls_cipher_scanner"]
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --strict-markers"
